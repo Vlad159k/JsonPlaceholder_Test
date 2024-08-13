@@ -1,23 +1,11 @@
 package org.example.service;
 
-import org.example.client.JsonPlaceholderClient;
 import org.example.model.Post;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class PostService {
-    private final JsonPlaceholderClient client;
-
-    public PostService(JsonPlaceholderClient client) {
-        this.client = client;
-    }
-
-    public List<Post> getAllPosts() {
-        return client.getAllPosts();
-    }
-
-    public List<Map.Entry<String, Integer>> findMostCommonWords() {
-        List<Post> posts = getAllPosts();
+    public static List<Map.Entry<String, Integer>> findMostCommonWords(List<Post> posts) {
         Map<String, Integer> wordCount = new HashMap<>();
 
         posts.forEach(post -> {

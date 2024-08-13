@@ -24,6 +24,17 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")
 
     implementation("io.qameta.allure:allure-rest-assured:2.29.0")
+
+    implementation("com.google.inject:guice:6.0.0") {
+        exclude (group = "com.google.guava", module = "guava")
+    }
+
+    implementation("com.google.guava:guava:33.2.1-jre")
+
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    implementation("org.slf4j:slf4j-api:2.0.16")
+    testImplementation("ch.qos.logback:logback-classic:1.5.6")
 }
 
 tasks.test {
@@ -31,6 +42,10 @@ tasks.test {
     finalizedBy("allureReport")
 }
 
-allure {
-    version.set("2.12.0")
+tasks.register("cleanAllureDir", Delete::class) {
+    delete("build/reports/allure-report")
+}
+
+tasks.named("allureReport") {
+    dependsOn("cleanAllureDir")
 }

@@ -6,10 +6,12 @@ public class Post {
     private String body;
     private int userId;
 
+    public Post() {}
+
     public Post(int id, String title, String body, int userId) {
         this.id = id;
-        this.title = title;
-        this.body = body;
+        this.title = title != null ? title : "";
+        this.body = body != null ? body : "";
         this.userId = userId;
     }
 
@@ -20,4 +22,14 @@ public class Post {
     public String getBody() { return body; }
 
     public int getUserId() { return userId; }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", body='" + body + '\'' +
+                ", userId=" + userId +
+                '}';
+    }
 }

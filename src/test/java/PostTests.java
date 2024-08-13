@@ -1,100 +1,127 @@
+import assertions.PostAssertions;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
-import org.example.builder.PostBuilder;
-import org.example.client.JsonPlaceholderClient;
 import org.example.model.Post;
 import org.junit.jupiter.api.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import com.google.inject.*;
+import org.example.di.ApiClientModule;
+import org.example.steps.PostSteps;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class PostTests {
-    private JsonPlaceholderClient client;
+    private PostSteps postSteps;
+    private PostAssertions postAssertions;
 
     @BeforeEach
     public void setup() {
-        client = new JsonPlaceholderClient("https://jsonplaceholder.typicode.com");
+        Injector injector = Guice.createInjector(new ApiClientModule());
+        postSteps = injector.getInstance(PostSteps.class);
+        postAssertions = new PostAssertions();
         RestAssured.filters(new AllureRestAssured());
     }
 
-    @Test
-    public void createPostTest() {
-        // Arrange
-        Post post = new PostBuilder()
-                .witId(101)
-                .withTitle("First post")
-                .withBody("This is the body of first post")
-                .withUserId(123)
-                .build();
+    static Stream<Arguments> providePostDataForCreation() {
+        return Stream.of(
+                // Positive
+                Arguments.of(101, "First Post", "This is the body of the first post", 1, 201, true),
+                Arguments.of(102, "Second Post", "This is the body of the second post", 2, 201, true),
 
+                // Negative
+                Arguments.of(-1, "Invalid Title", "Invalid Body", -1, 400, false),
+                Arguments.of(103, "Title", "Body", 9999, 400, false)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("providePostDataForCreation")
+    @DisplayName("Create Post Test (Positive & Negative)")
+    public void createPostTest(int id, String title, String body, int userId, int expectedStatusCode, boolean isPositive) {
         // Act
-        var response = client.createPost(post);
+        var response = postSteps.createPost(id, title, body, userId);
 
         // Assert
-        assertEquals(201, response.getStatusCode(),
-                "Post creation failed: expected status code 201, but got " + response.getStatusCode());
-        assertNotNull(response.jsonPath().getString("id"),
-                "Post creation failed: 'id' should not be null, but it is.");
+        postAssertions.assertStatusCode(response, expectedStatusCode);
+        postAssertions.assertPostCreated(response, isPositive);
+    }
+
+    static Stream<Arguments> providePostDataForGet() {
+        return Stream.of(
+                // Positive
+                Arguments.of(1, 200, true),
+
+                // Negative
+                Arguments.of(9999, 404, false)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("providePostDataForGet")
+    @DisplayName("Get Post Test (Positive & Negative)")
+    public void getPostTest(int postId, int expectedStatusCode, boolean isPositive) {
+        // Act
+        var response = postSteps.getPost(postId);
+
+        // Assert
+        postAssertions.assertStatusCode(response, expectedStatusCode);
+        postAssertions.assertPostFetched(response, postId, isPositive);
     }
 
     @Test
-    public void getPostTest() {
-        // Arrange
-        int postId = 1;
-
-        // Act
-        var response = client.getPost(postId);
-
-        // Assert
-        assertEquals(200, response.getStatusCode(),
-                "Failed to retrieve post: expected status code 200, but got " + response.getStatusCode());
-        assertEquals(postId, response.jsonPath().getInt("id"),
-                "Failed to retrieve correct post: expected ID " + postId + ", but got " + response.jsonPath().getInt("id"));
-    }
-
-    @Test
+    @DisplayName("Get All Posts Test")
     public void getAllPostsTest() {
         // Arrange
         int expectedPostsCount = 100;
 
         // Act
-        var posts = client.getAllPosts();
+        List<Post> posts = postSteps.getAllPosts();
 
         // Assert
-        assertEquals(expectedPostsCount, posts.size(),
-                "Failed to retrieve all posts: expected " + expectedPostsCount + " posts, but got " + posts.size());
+        postAssertions.assertPostsCount(posts, expectedPostsCount);
     }
 
-    @Test
-    public void updatePostTest() {
-        // Arrange
-        int postId = 100;
-        Post updatePost = new PostBuilder()
-                .witId(99)
-                .withTitle("Update post")
-                .withBody("This is the body of updated post")
-                .withUserId(123)
-                .build();
+    static Stream<Arguments> providePostDataForUpdate() {
+        return Stream.of(
+                // Positive
+                Arguments.of(1, "Updated Title", "Updated Body", 1, 200, true),
 
-        // Act
-        var response = client.updatePost(postId, updatePost);
-
-        // Assert
-        assertEquals(200, response.getStatusCode(),
-                "Post update failed: expected status code 200, but got " + response.getStatusCode());
-        assertEquals("Update post", response.jsonPath().getString("title"),
-                "Post update failed: expected title 'Update post', but got '" + response.jsonPath().getString("title") + "'");
+                // Negative
+                Arguments.of(9999, "Invalid Title", "Invalid Body", -1, 404, false)
+        );
     }
 
-    @Test
-    public void deletePostTest() {
-        // Arrange
-        int postId = 1;
-
+    @ParameterizedTest
+    @MethodSource("providePostDataForUpdate")
+    @DisplayName("Update Post Test (Positive & Negative)")
+    public void updatePostTest(int postId, String updatedTitle, String updatedBody, int userId, int expectedStatusCode, boolean isPositive) {
         // Act
-        var response = client.deletePost(postId);
+        var response = postSteps.updatePost(postId, updatedTitle, updatedBody, userId);
 
         // Assert
-        assertEquals(200, response.getStatusCode(),
-                "Post deletion failed: expected status code 200, but got " + response.getStatusCode());
+        postAssertions.assertStatusCode(response, expectedStatusCode);
+        postAssertions.assertPostUpdated(response, updatedTitle, isPositive);
+    }
+
+    static Stream<Arguments> providePostDataForDeletion() {
+        return Stream.of(
+                // Positive
+                Arguments.of(1, 200),
+
+                // Negative
+                Arguments.of(9999, 404)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("providePostDataForDeletion")
+    @DisplayName("Delete Post Test (Positive & Negative)")
+    public void deletePostTest(int postId, int expectedStatusCode) {
+        // Act
+        var response = postSteps.deletePost(postId);
+
+        // Assert
+        postAssertions.assertStatusCode(response, expectedStatusCode);
     }
 }
