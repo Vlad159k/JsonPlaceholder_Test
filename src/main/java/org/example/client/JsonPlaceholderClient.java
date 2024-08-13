@@ -48,8 +48,7 @@ public class JsonPlaceholderClient {
                 .get(POSTS_ENDPOINT);
 
         if (response.getStatusCode() == 200) {
-            List<Post> posts = response.jsonPath().getList("", Post.class);
-            return posts;
+            return response.jsonPath().getList("", Post.class);
         } else {
             throw new RuntimeException("Failed to retrieve posts");
         }
