@@ -1,10 +1,10 @@
 package org.example.model;
 
 public class Post {
-    private int id;
-    private String title;
-    private String body;
-    private int userId;
+    private int id = 0;
+    private String title = "";
+    private String body = "";
+    private int userId = 0;
 
     public Post() {}
 

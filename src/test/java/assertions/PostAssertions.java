@@ -46,7 +46,8 @@ public class PostAssertions {
         }
     }
 
-    public void assertPostsCount(List<Post> posts, int expectedPostsCount) {
+    public void assertPostsCount(Response response, int expectedPostsCount) {
+        var posts = response.jsonPath().getList("", Post.class);
         logger.info("Asserting the number of retrieved posts. Expected: {}, Actual: {}", expectedPostsCount, posts.size());
         assertEquals(expectedPostsCount, posts.size(),
                 "Failed to retrieve all posts: expected " + expectedPostsCount + " posts, but got " + posts.size());

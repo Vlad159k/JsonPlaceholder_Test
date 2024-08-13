@@ -31,7 +31,7 @@ public class PostTests {
 
                 // Negative
                 Arguments.of(-1, "Invalid Title", "Invalid Body", -1, 400, false),
-                Arguments.of(103, "Title", "Body", 9999, 400, false)
+                Arguments.of(103, "Title", "Body", -1, 400, false)
         );
     }
 
@@ -53,7 +53,7 @@ public class PostTests {
                 Arguments.of(1, 200, true),
 
                 // Negative
-                Arguments.of(9999, 404, false)
+                Arguments.of(-1, 404, false)
         );
     }
 
@@ -76,7 +76,7 @@ public class PostTests {
         int expectedPostsCount = 100;
 
         // Act
-        List<Post> posts = postSteps.getAllPosts();
+        var posts = postSteps.getAllPosts();
 
         // Assert
         postAssertions.assertPostsCount(posts, expectedPostsCount);
@@ -88,7 +88,7 @@ public class PostTests {
                 Arguments.of(1, "Updated Title", "Updated Body", 1, 200, true),
 
                 // Negative
-                Arguments.of(9999, "Invalid Title", "Invalid Body", -1, 404, false)
+                Arguments.of(-1, "Invalid Title", "Invalid Body", -1, 404, false)
         );
     }
 
@@ -110,7 +110,7 @@ public class PostTests {
                 Arguments.of(1, 200),
 
                 // Negative
-                Arguments.of(9999, 404)
+                Arguments.of(-1, 404)
         );
     }
 

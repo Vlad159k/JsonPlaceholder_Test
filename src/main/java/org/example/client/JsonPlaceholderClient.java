@@ -40,18 +40,12 @@ public class JsonPlaceholderClient {
                 .get(POST_BY_ID_ENDPOINT, id);
     }
 
-    public List<Post> getAllPosts() {
+    public Response getAllPosts() {
         logger.info("Sending GET request to retrieve all posts");
-        Response response = given()
+        return given()
                 .contentType(ContentType.JSON)
                 .when()
                 .get(POSTS_ENDPOINT);
-
-        if (response.getStatusCode() == 200) {
-            return response.jsonPath().getList("", Post.class);
-        } else {
-            throw new RuntimeException("Failed to retrieve posts");
-        }
     }
 
     public Response updatePost(int id, Post post) {

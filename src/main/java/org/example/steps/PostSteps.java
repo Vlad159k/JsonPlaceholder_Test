@@ -20,7 +20,7 @@ public class PostSteps {
 
     public Response createPost(int id, String title, String body, int userId) {
         logger.info("Creating a new post with id={}, title={}, userId={}", id, title, userId);
-        Post post = new PostBuilder()
+         Post post = new PostBuilder()
                 .witId(id)
                 .withTitle(title)
                 .withBody(body)
@@ -50,7 +50,7 @@ public class PostSteps {
         return client.deletePost(postId);
     }
 
-    public List<Post> getAllPosts() {
+    public Response getAllPosts() {
         logger.info("Retrieving all posts");
         return client.getAllPosts();
     }

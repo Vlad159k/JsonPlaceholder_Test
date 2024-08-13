@@ -31,7 +31,7 @@ public class WordFrequencyTests {
     @DisplayName("Find Most Common Words Test")
     public void findMostCommonWordsTest() {
         // Act
-        List<Post> posts = postSteps.getAllPosts();
+        var posts = postSteps.getAllPosts();
         List<Map.Entry<String, Integer>> topWords = wordFrequencyAnalyzerUtil.findMostCommonWords(posts);
 
         // Assert

@@ -1,5 +1,6 @@
 package org.example.utils;
 
+import io.restassured.response.Response;
 import org.example.model.Post;
 import org.slf4j.Logger;
 import java.util.*;
@@ -12,12 +13,12 @@ public class WordFrequencyAnalyzerUtil {
         this.logger = logger;
     }
 
-    public List<Map.Entry<String, Integer>> findMostCommonWords(List<Post> posts) {
+    public List<Map.Entry<String, Integer>> findMostCommonWords(Response response) {
         logger.info("Finding most common words in the body of all posts");
-
+        var allPosts = response.jsonPath().getList("", Post.class);
         Map<String, Integer> wordCount = new HashMap<>();
 
-        for (Post post : posts) {
+        for (Post post : allPosts) {
             String[] words = post.getBody().toLowerCase().split("\\W+");
             for (String word : words) {
                 wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
@@ -30,8 +31,8 @@ public class WordFrequencyAnalyzerUtil {
                 .collect(Collectors.toList());
     }
 
-    public void logTop10Words(List<Post> posts) {
-        List<Map.Entry<String, Integer>> topWords = findMostCommonWords(posts);
+    public void logTop10Words(Response response) {
+        List<Map.Entry<String, Integer>> topWords = findMostCommonWords(response);
         logger.info("Top 10 most common words:");
         int rank = 1;
         for (Map.Entry<String, Integer> entry : topWords) {
