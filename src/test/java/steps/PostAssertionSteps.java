@@ -36,14 +36,10 @@ public class PostAssertionSteps {
         }
     }
 
-    public void assertPostUpdated(Response response, String expectedTitle, boolean isSuccess) {
-        if (isSuccess) {
-            Post post = response.as(Post.class);
-            assertEquals(expectedTitle, post.getTitle(), "Post title was not updated");
-            logger.info("Post updated successfully: {}", post);
-        } else {
-            logger.warn("Post updating failed as expected");
-        }
+    public void assertPostUpdated(Response response, String expectedTitle) {
+        Post post = response.as(Post.class);
+        assertEquals(expectedTitle, post.getTitle(), "Post title was not updated");
+        logger.info("Post updated successfully: {}", post);
     }
 
     public void assertPostEquals(Post actualPost, Post expectedPost, boolean isSuccess) {
@@ -52,6 +48,10 @@ public class PostAssertionSteps {
             assertEquals(expectedPost, actualPost, "The actual post does not match the expected post");
         } else {
             logger.info("Skipping post comparison as the test is expected to fail.");
+            assertEquals(0, actualPost.getId(), "The id should be 0 for a failed operation.");
+            assertTrue(actualPost.getTitle().isEmpty(), "The title should be empty for a failed operation.");
+            assertTrue(actualPost.getBody().isEmpty(), "The body should be empty for a failed operation.");
+            assertEquals(0, actualPost.getUserId(), "The userId should be 0 for a failed operation.");
         }
     }
 

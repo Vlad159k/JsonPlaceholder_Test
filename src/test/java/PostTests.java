@@ -73,7 +73,7 @@ public class PostTests extends TestBase {
 
         // Assert
         postAssertionSteps.assertStatusCode(response, expectedStatusCode);
-        postAssertionSteps.assertPostUpdated(response, updatedTitle, isSuccess);
+        postAssertionSteps.assertPostUpdated(response, updatedTitle);
         postAssertionSteps.assertPostEquals(responsePost, post, isSuccess);
     }
 
@@ -105,7 +105,7 @@ public class PostTests extends TestBase {
     static Stream<Arguments> providePostDataForUpdate() {
         return Stream.of(
                 Arguments.of(1, "Updated Title", "Updated Body", 1, 200, true),
-                Arguments.of(100, "Invalid Title", "Invalid Body", 100, 200, true)
+                Arguments.of(100, "Updated Title", "Updated Body", 100, 200, true)
         );
     }
 
