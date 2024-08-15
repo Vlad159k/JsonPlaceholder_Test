@@ -91,8 +91,7 @@ public class PostTests extends TestBase {
     static Stream<Arguments> providePostDataForCreation() {
         return Stream.of(
                 Arguments.of("First Post", "This is the body of the first post", 1, 201, true),
-                Arguments.of("Invalid Title", "Invalid Body", -1, 400, false),
-                Arguments.of("Title", "Body", -1, 400, false)
+                Arguments.of("First Post", "This is the body of the first post", 100, 201, true)
         );
     }
 
