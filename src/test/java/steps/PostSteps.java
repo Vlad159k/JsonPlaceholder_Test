@@ -1,16 +1,46 @@
-package org.example.utils;
+package steps;
 
+import com.google.inject.Inject;
 import io.restassured.response.Response;
+import org.example.client.JsonPlaceholderClient;
 import org.example.model.Post;
 import org.slf4j.Logger;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class WordFrequencyAnalyzerUtil {
+public class PostSteps {
     private final Logger logger;
+    private final JsonPlaceholderClient client;
 
-    public WordFrequencyAnalyzerUtil(Logger logger) {
+    @Inject
+    public PostSteps(Logger logger, JsonPlaceholderClient client) {
         this.logger = logger;
+        this.client = client;
+    }
+
+    public Response createPost(Post post) {
+        logger.info("Creating a new post with body={}, title={}, userId={}", post.getBody(), post.getTitle(), post.getUserId());
+        return client.createPost(post);
+    }
+
+    public Response getPost(int postId) {
+        logger.info("Getting post with id={}", postId);
+        return client.getPost(postId);
+    }
+
+    public Response updatePost(int postId, Post post) {
+        logger.info("Updating post with id={}, title={}, userId={}", post.getId(), post.getTitle(), post.getUserId());
+        return client.updatePost(postId, post);
+    }
+
+    public Response deletePost(int postId) {
+        logger.info("Deleting post with id={}", postId);
+        return client.deletePost(postId);
+    }
+
+    public Response getAllPosts() {
+        logger.info("Retrieving all posts");
+        return client.getAllPosts();
     }
 
     public List<Map.Entry<String, Integer>> findMostCommonWords(Response response) {

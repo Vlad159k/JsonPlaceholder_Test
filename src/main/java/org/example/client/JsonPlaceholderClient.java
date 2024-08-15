@@ -5,10 +5,9 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.example.model.Post;
-import java.util.List;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import static io.restassured.RestAssured.*;
 
 public class JsonPlaceholderClient {
@@ -26,9 +25,14 @@ public class JsonPlaceholderClient {
 
     public Response createPost(Post post) {
         logger.info("Sending POST request to create a new post");
+        Map<String, Object> postFields = new HashMap<>();
+        postFields.put("title", post.getTitle());
+        postFields.put("body", post.getBody());
+        postFields.put("userId", post.getUserId());
+
         return given()
                 .contentType(ContentType.JSON)
-                .body(gson.toJson(post))
+                .body(postFields)
                 .when()
                 .post(POSTS_ENDPOINT);
     }

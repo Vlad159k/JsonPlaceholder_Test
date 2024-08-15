@@ -1,60 +1,33 @@
-import assertions.PostAssertions;
-import io.qameta.allure.restassured.AllureRestAssured;
-import io.restassured.RestAssured;
+import base.TestBase;
+import org.example.builder.PostBuilder;
 import org.example.model.Post;
 import org.junit.jupiter.api.*;
-import com.google.inject.*;
-import org.example.di.ApiClientModule;
-import org.example.steps.PostSteps;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-import java.util.List;
 import java.util.stream.Stream;
 
-public class PostTests {
-    private PostSteps postSteps;
-    private PostAssertions postAssertions;
-
-    @BeforeEach
-    public void setup() {
-        Injector injector = Guice.createInjector(new ApiClientModule());
-        postSteps = injector.getInstance(PostSteps.class);
-        postAssertions = new PostAssertions();
-        RestAssured.filters(new AllureRestAssured());
-    }
-
-    static Stream<Arguments> providePostDataForCreation() {
-        return Stream.of(
-                // Positive
-                Arguments.of(101, "First Post", "This is the body of the first post", 1, 201, true),
-                Arguments.of(102, "Second Post", "This is the body of the second post", 2, 201, true),
-
-                // Negative
-                Arguments.of(-1, "Invalid Title", "Invalid Body", -1, 400, false),
-                Arguments.of(103, "Title", "Body", -1, 400, false)
-        );
-    }
+public class PostTests extends TestBase {
 
     @ParameterizedTest
     @MethodSource("providePostDataForCreation")
     @DisplayName("Create Post Test (Positive & Negative)")
-    public void createPostTest(int id, String title, String body, int userId, int expectedStatusCode, boolean isPositive) {
+    public void createPostTest(String title, String body, int userId, int expectedStatusCode, boolean isPositive) {
+        // Arrange
+        Post post = new PostBuilder()
+                .withTitle(title)
+                .withBody(body)
+                .withUserId(userId)
+                .build();
+
         // Act
-        var response = postSteps.createPost(id, title, body, userId);
+        var response = postSteps.createPost(post);
+        Post responsePost = response.as(Post.class);
+        post.setId(responsePost.getId());
 
         // Assert
-        postAssertions.assertStatusCode(response, expectedStatusCode);
-        postAssertions.assertPostCreated(response, isPositive);
-    }
-
-    static Stream<Arguments> providePostDataForGet() {
-        return Stream.of(
-                // Positive
-                Arguments.of(1, 200, true),
-
-                // Negative
-                Arguments.of(-1, 404, false)
-        );
+        postAssertionSteps.assertStatusCode(response, expectedStatusCode);
+        postAssertionSteps.assertPostCreated(response, isPositive);
+        postAssertionSteps.assertPostEquals(responsePost, post, isPositive);
     }
 
     @ParameterizedTest
@@ -65,8 +38,8 @@ public class PostTests {
         var response = postSteps.getPost(postId);
 
         // Assert
-        postAssertions.assertStatusCode(response, expectedStatusCode);
-        postAssertions.assertPostFetched(response, postId, isPositive);
+        postAssertionSteps.assertStatusCode(response, expectedStatusCode);
+        postAssertionSteps.assertPostFetched(response, postId, isPositive);
     }
 
     @Test
@@ -79,39 +52,29 @@ public class PostTests {
         var posts = postSteps.getAllPosts();
 
         // Assert
-        postAssertions.assertPostsCount(posts, expectedPostsCount);
-    }
-
-    static Stream<Arguments> providePostDataForUpdate() {
-        return Stream.of(
-                // Positive
-                Arguments.of(1, "Updated Title", "Updated Body", 1, 200, true),
-
-                // Negative
-                Arguments.of(-1, "Invalid Title", "Invalid Body", -1, 404, false)
-        );
+        postAssertionSteps.assertPostsCount(posts, expectedPostsCount);
     }
 
     @ParameterizedTest
     @MethodSource("providePostDataForUpdate")
     @DisplayName("Update Post Test (Positive & Negative)")
-    public void updatePostTest(int postId, String updatedTitle, String updatedBody, int userId, int expectedStatusCode, boolean isPositive) {
+    public void updatePostTest(int postId, String updatedTitle, String updatedBody, int userId, int expectedStatusCode, boolean isSuccess) {
+        // Arrange
+        Post post = new PostBuilder()
+                .witId(postId)
+                .withTitle(updatedTitle)
+                .withBody(updatedBody)
+                .withUserId(userId)
+                .build();
+
         // Act
-        var response = postSteps.updatePost(postId, updatedTitle, updatedBody, userId);
+        var response = postSteps.updatePost(postId, post);
+        Post responsePost = response.as(Post.class);
 
         // Assert
-        postAssertions.assertStatusCode(response, expectedStatusCode);
-        postAssertions.assertPostUpdated(response, updatedTitle, isPositive);
-    }
-
-    static Stream<Arguments> providePostDataForDeletion() {
-        return Stream.of(
-                // Positive
-                Arguments.of(1, 200),
-
-                // Negative
-                Arguments.of(-1, 404)
-        );
+        postAssertionSteps.assertStatusCode(response, expectedStatusCode);
+        postAssertionSteps.assertPostUpdated(response, updatedTitle, isSuccess);
+        postAssertionSteps.assertPostEquals(responsePost, post, isSuccess);
     }
 
     @ParameterizedTest
@@ -122,6 +85,35 @@ public class PostTests {
         var response = postSteps.deletePost(postId);
 
         // Assert
-        postAssertions.assertStatusCode(response, expectedStatusCode);
+        postAssertionSteps.assertStatusCode(response, expectedStatusCode);
+    }
+
+    static Stream<Arguments> providePostDataForCreation() {
+        return Stream.of(
+                Arguments.of("First Post", "This is the body of the first post", 1, 201, true),
+                Arguments.of("Invalid Title", "Invalid Body", -1, 400, false),
+                Arguments.of("Title", "Body", -1, 400, false)
+        );
+    }
+
+    static Stream<Arguments> providePostDataForGet() {
+        return Stream.of(
+                Arguments.of(1, 200, true),
+                Arguments.of(-1, 404, false)
+        );
+    }
+
+    static Stream<Arguments> providePostDataForUpdate() {
+        return Stream.of(
+                Arguments.of(1, "Updated Title", "Updated Body", 1, 200, true),
+                Arguments.of(100, "Invalid Title", "Invalid Body", 100, 200, true)
+        );
+    }
+
+    static Stream<Arguments> providePostDataForDeletion() {
+        return Stream.of(
+                Arguments.of(1, 200),
+                Arguments.of(101, 200)
+        );
     }
 }
