@@ -3,10 +3,10 @@ package org.example.model;
 import java.util.Objects;
 
 public class Post {
-    private int id = 0;
-    private String title = "";
-    private String body = "";
-    private int userId = 0;
+    private int id;
+    private String title;
+    private String body;
+    private int userId;
 
     public Post() {}
 
@@ -59,15 +59,5 @@ public class Post {
     @Override
     public int hashCode() {
         return Objects.hash(id, title, body, userId);
-    }
-
-    @Override
-    public String toString() {
-        return "Post{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", body='" + body + '\'' +
-                ", userId=" + userId +
-                '}';
     }
 }

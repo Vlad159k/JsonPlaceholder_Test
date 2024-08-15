@@ -5,15 +5,16 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import org.example.client.JsonPlaceholderClient;
 import org.example.config.ConfigLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.example.model.AppConfig;
+import org.slf4j.*;
 
 public class ApiClientModule extends AbstractModule {
 
     @Provides
     @Singleton
     public JsonPlaceholderClient provideJsonPlaceholderClient() {
-        return new JsonPlaceholderClient(ConfigLoader.getBaseUrl());
+        AppConfig config = ConfigLoader.getConfig();
+        return new JsonPlaceholderClient(config.getBaseUrl());
     }
 
     @Provides

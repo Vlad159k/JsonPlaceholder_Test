@@ -3,10 +3,10 @@ package org.example.builder;
 import org.example.model.Post;
 
 public class PostBuilder {
-    private int id;
-    private String title;
-    private String body;
-    private int userId;
+    private int id = 0;
+    private String title = "";
+    private String body = "";
+    private int userId = 0;
 
     public PostBuilder witId(int id) {
         this.id = id;
