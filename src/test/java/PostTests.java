@@ -73,7 +73,7 @@ public class PostTests extends TestBase {
 
         // Assert
         postAssertionSteps.assertStatusCode(response, expectedStatusCode);
-        postAssertionSteps.assertPostUpdated(response, updatedTitle);
+        postAssertionSteps.assertPostUpdated(response, updatedTitle, isSuccess);
         postAssertionSteps.assertPostEquals(responsePost, post, isSuccess);
     }
 
