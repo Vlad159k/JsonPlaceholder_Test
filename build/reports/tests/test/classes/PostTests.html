@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - Class PostTests</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>Class PostTests</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/default-package.html">default-package</a> &gt; PostTests</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">9</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">8.090s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Method name</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">[1] First Post, This is the body of the first post, 1, 201, true</td>
+<td class="success">createPostTest(String, String, int, int, boolean)[1]</td>
+<td class="success">0.673s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[2] First Post, This is the body of the first post, 100, 201, true</td>
+<td class="success">createPostTest(String, String, int, int, boolean)[2]</td>
+<td class="success">0.585s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[1] 1, 200</td>
+<td class="success">deletePostTest(int, int)[1]</td>
+<td class="success">0.678s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[2] 101, 200</td>
+<td class="success">deletePostTest(int, int)[2]</td>
+<td class="success">0.590s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Get All Posts Test</td>
+<td class="success">getAllPostsTest()</td>
+<td class="success">0.444s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[1] 1, 200, true</td>
+<td class="success">getPostTest(int, int, boolean)[1]</td>
+<td class="success">3.739s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[2] -1, 404, false</td>
+<td class="success">getPostTest(int, int, boolean)[2]</td>
+<td class="success">0.079s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[1] 1, Updated Title, Updated Body, 1, 200, true</td>
+<td class="success">updatePostTest(int, String, String, int, int, boolean)[1]</td>
+<td class="success">0.593s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[2] 100, Updated Title, Updated Body, 100, 200, true</td>
+<td class="success">updatePostTest(int, String, String, int, int, boolean)[2]</td>
+<td class="success">0.709s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>20:47:27.566 [Test worker] INFO ApplicationLogger -- Getting post with id=1
+20:47:27.573 [Test worker] INFO org.example.client.JsonPlaceholderClient -- Sending GET request to retrieve post with ID: 1
+20:47:29.527 [Test worker] INFO steps.PostAssertionSteps -- Asserting status code. Expected: 200, Actual: 200
+20:47:29.983 [Test worker] INFO steps.PostAssertionSteps -- Post fetched successfully: org.example.model.Post@1186d952
+20:47:30.102 [Test worker] INFO ApplicationLogger -- Getting post with id=-1
+20:47:30.103 [Test worker] INFO org.example.client.JsonPlaceholderClient -- Sending GET request to retrieve post with ID: -1
+20:47:30.175 [Test worker] INFO steps.PostAssertionSteps -- Asserting status code. Expected: 404, Actual: 404
+20:47:30.176 [Test worker] WARN steps.PostAssertionSteps -- Post fetching failed as expected
+20:47:30.195 [Test worker] INFO ApplicationLogger -- Deleting post with id=1
+20:47:30.195 [Test worker] INFO org.example.client.JsonPlaceholderClient -- Sending DELETE request to remove post with ID: 1
+20:47:30.868 [Test worker] INFO steps.PostAssertionSteps -- Asserting status code. Expected: 200, Actual: 200
+20:47:30.878 [Test worker] INFO ApplicationLogger -- Deleting post with id=101
+20:47:30.878 [Test worker] INFO org.example.client.JsonPlaceholderClient -- Sending DELETE request to remove post with ID: 101
+20:47:31.465 [Test worker] INFO steps.PostAssertionSteps -- Asserting status code. Expected: 200, Actual: 200
+20:47:31.475 [Test worker] INFO ApplicationLogger -- Retrieving all posts
+20:47:31.475 [Test worker] INFO org.example.client.JsonPlaceholderClient -- Sending GET request to retrieve all posts
+20:47:31.914 [Test worker] INFO steps.PostAssertionSteps -- Asserting the number of retrieved posts. Expected: 100, Actual: 100
+20:47:31.931 [Test worker] INFO ApplicationLogger -- Updating post with id=1, title=Updated Title, userId=1
+20:47:31.931 [Test worker] INFO org.example.client.JsonPlaceholderClient -- Sending PUT request to update post with ID: 1
+20:47:32.513 [Test worker] INFO steps.PostAssertionSteps -- Asserting status code. Expected: 200, Actual: 200
+20:47:32.518 [Test worker] INFO steps.PostAssertionSteps -- Post updated successfully: org.example.model.Post@e8d4d04d
+20:47:32.518 [Test worker] INFO steps.PostAssertionSteps -- Asserting that the created post matches the expected post.
+20:47:32.529 [Test worker] INFO ApplicationLogger -- Updating post with id=100, title=Updated Title, userId=100
+20:47:32.529 [Test worker] INFO org.example.client.JsonPlaceholderClient -- Sending PUT request to update post with ID: 100
+20:47:33.232 [Test worker] INFO steps.PostAssertionSteps -- Asserting status code. Expected: 200, Actual: 200
+20:47:33.233 [Test worker] INFO steps.PostAssertionSteps -- Post updated successfully: org.example.model.Post@e901d16d
+20:47:33.233 [Test worker] INFO steps.PostAssertionSteps -- Asserting that the created post matches the expected post.
+20:47:33.251 [Test worker] INFO ApplicationLogger -- Creating a new post with body=This is the body of the first post, title=First Post, userId=1
+20:47:33.251 [Test worker] INFO org.example.client.JsonPlaceholderClient -- Sending POST request to create a new post
+20:47:33.917 [Test worker] INFO steps.PostAssertionSteps -- Asserting status code. Expected: 201, Actual: 201
+20:47:33.918 [Test worker] INFO steps.PostAssertionSteps -- Post created successfully with ID: 101
+20:47:33.918 [Test worker] INFO steps.PostAssertionSteps -- Asserting that the created post matches the expected post.
+20:47:33.926 [Test worker] INFO ApplicationLogger -- Creating a new post with body=This is the body of the first post, title=First Post, userId=100
+20:47:33.926 [Test worker] INFO org.example.client.JsonPlaceholderClient -- Sending POST request to create a new post
+20:47:34.506 [Test worker] INFO steps.PostAssertionSteps -- Asserting status code. Expected: 201, Actual: 201
+20:47:34.507 [Test worker] INFO steps.PostAssertionSteps -- Post created successfully with ID: 101
+20:47:34.508 [Test worker] INFO steps.PostAssertionSteps -- Asserting that the created post matches the expected post.
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 8.8</a> at Aug 15, 2024, 8:47:34 PM</p>
+</div>
+</div>
+</body>
+</html>
