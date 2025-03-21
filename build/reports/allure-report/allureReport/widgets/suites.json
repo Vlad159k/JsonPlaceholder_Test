@@ -1,1 +1,0 @@
-{"total":2,"items":[{"uid":"3accb471451c2bf4032f2db7e1cbcbae","name":"PostTests","statistic":{"failed":1,"broken":0,"skipped":0,"passed":9,"unknown":0,"total":10}},{"uid":"c000f88e2bc33c38ea388a968d139ff2","name":"WordFrequencyTests","statistic":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1}}]}
