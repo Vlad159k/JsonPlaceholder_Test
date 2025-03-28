@@ -4,14 +4,12 @@
 *.war
 *.ear
 *.log
-*.iml
 
 # IntelliJ IDEA
 .idea/
-*.iml
 *.iws
+*.iml
 out/
-target/
 
 # Build directories
 bin/
@@ -28,8 +26,21 @@ release.properties
 
 # Gradle
 .gradle/
-build/
+!/gradlew
+!/gradlew.bat
+!/gradle/wrapper/gradle-wrapper.properties
+!/build.gradle.kts
+!/settings.gradle.kts
+
+# VS Code
+.vscode/
 
 # OS files
 .DS_Store
 Thumbs.db
+
+# Other IDEs
+.idea/libraries/
+.classpath
+.project
+*.env
